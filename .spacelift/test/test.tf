@@ -1,3 +1,12 @@
+terraform {
+  required_providers {
+    spacelift = {
+      source = "spacelift-io/spacelift"
+    }
+  }
+}
+
+
 provider "spacelift" {}
 
 variable "spacelift_run_id" {}
