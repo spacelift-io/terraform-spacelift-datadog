@@ -5,10 +5,10 @@ resource "spacelift_named_webhook" "datadog-metrics" {
   endpoint = "https://api.${var.dd_site}/api/v2/series"
   enabled  = true
 
-  labels = flatten(
+  labels = flatten(concat(
     ["datadog", "ddmetrics"],
     [for k, v in var.extra_tags : "${k}:${v}"],
-  )
+  ))
 }
 
 resource "spacelift_named_webhook_secret_header" "datadog-api-key" {

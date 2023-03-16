@@ -11,7 +11,7 @@ module "spacelift_datadog" {
   dd_api_key = var.dd_api_key
   dd_site = "datadoghq.com"
   space_id = "root"
-  extra_tags = ["env:prod"]
+  extra_tags = {"env":"prod"}
 }
 ```
 
