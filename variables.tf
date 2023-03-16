@@ -24,6 +24,12 @@ variable "dd_site" {
   }
 }
 
+variable "integration_name" {
+  type = string
+  description = "Name of the integration to create."
+  default = "Datadog metrics"
+}
+
 variable "space_id" {
   type        = string
   description = "ID of the Spacelift space to create notitications for."

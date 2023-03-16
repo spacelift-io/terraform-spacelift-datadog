@@ -1,5 +1,5 @@
 resource "spacelift_named_webhook" "datadog-metrics" {
-  name     = "Datadog metrics (${var.dd_site})"
+  name     = "${var.integration_name} (${var.dd_site})"
   space_id = var.space_id
 
   endpoint = "https://api.${var.dd_site}/api/v2/series"

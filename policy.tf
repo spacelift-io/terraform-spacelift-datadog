@@ -1,5 +1,5 @@
 resource "spacelift_policy" "datadog-metrics" {
-  name     = "Datadog metrics (${var.dd_site})"
+  name     = "${var.integration_name} (${var.dd_site})"
   type     = "NOTIFICATION"
   space_id = var.space_id
 
