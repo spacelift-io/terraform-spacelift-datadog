@@ -24,6 +24,7 @@ webhook[{"endpoint_id": endpoint_id, "payload": payload}] {
 
 	payload := {"series": array.concat(
 		[
+			policies(endpoint.labels),
 			run_count(endpoint.labels),
 			resources("added", endpoint.labels),
 			resources("changed", endpoint.labels),
@@ -66,6 +67,27 @@ resources(type, extra_tags) = {
 	"tags": array.concat(tags(extra_tags), [sprintf("change_type:%s", [type])]),
 	"unit": "operation",
 }
+
+policies(extra_tags) = [metric |
+	receipt := input.run_updated.policy_receipts[_]
+
+	receipt_tags := array.concat(receipt.flags, [
+		sprintf("policy_name:%s", [receipt.name]),
+		sprintf("policy_outcome:%s", [receipt.outcome]),
+		sprintf("policy_type:%s", [lower(receipt.type)]),
+	])
+
+	metric := {
+		"metric": "spacelift.integration.run.policies",
+		"type": 1, # count
+		"points": [{
+			"timestamp": timestamp,
+			"value": 1,
+		}],
+		"tags": array.concat(tags(extra_tags), receipt_tags),
+		"unit": "policy",
+	}
+]
 
 # Metric definition for spacelift.integration.run.timing.
 #
