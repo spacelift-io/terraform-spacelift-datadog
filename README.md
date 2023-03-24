@@ -17,7 +17,7 @@ module "spacelift_datadog" {
 
 This data allows you to generate dashboards like this one:
 
-![Example dashboard screenshot](./assets/dashboard-screenshot.png)
+![Example dashboard screenshot](https://docs.spacelift.io/assets/screenshots/datadog-screenshot.png)
 
 ## Metrics
 
@@ -26,6 +26,7 @@ The following metrics are sent:
 - `spacelift.integration.run.count` (counter) - a simple count of runs;
 - `spacelift.integration.run.timing` (counter, nanoseconds) - the duration of different run states. In addition to [common tags](#common-tags), this metric is also tagged with the state name, eg. `state:planning`, `state:applying`, etc.;
 - `spacelift.integration.run.resources` (counter) - the resources affected by a run. In addition to [common tags](#common-tags), this metric is also tagged with the change type, eg. `change_type:added`, `change_type:changed`, etc.;
+- `spacelift.integration.run.policies` (counter) - policy evaluations for the run. In addition to [common tags](#common-tags), this metric is also tagged with the policy type (eg. `policy_type:plan`), policy name (eg. `policy_name:AWS IAM compliance`) and policy outcome (eg. `policy_outcome:allow`). If the policy sets any [flags](https://docs.spacelift.io/concepts/policy/#policy-flags), these are also added to the metric as tags. Note that we do not include notification policies in this metric, to avoid a circular dependency.
 
 ## Common tags
 
