@@ -118,6 +118,7 @@ tags(extra_tags) = array.concat([tag | tag := extra_tags[_]; contains(tag, ":")]
 	sprintf("account:%s", [input.account.name]),
 	sprintf("branch:%s", [input.run_updated.run.commit.branch]),
 	sprintf("drift_detection:%s", [input.run_updated.run.drift_detection]),
+	sprintf("run_note:%s", [input.run_updated.note]),
 	sprintf("run_type:%s", [lower(input.run_updated.run.type)]),
 	sprintf("final_state:%s", [lower(run_state)]),
 	sprintf("space:%s", [lower(input.run_updated.stack.space.id)]),
