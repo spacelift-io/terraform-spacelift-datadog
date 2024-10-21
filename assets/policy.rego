@@ -124,6 +124,7 @@ tags(extra_tags) = array.concat([tag | tag := extra_tags[_]; contains(tag, ":")]
 	sprintf("final_state:%s", [lower(run_state)]),
 	sprintf("space:%s", [lower(input.run_updated.stack.space.id)]),
 	sprintf("stack:%s", [lower(input.run_updated.stack.id)]),
+	sprintf("triggered_by:%s", [input.run_updated.run.triggered_by]),
     sprintf("worker_pool:%s", [worker_pool]),
 ])
 
