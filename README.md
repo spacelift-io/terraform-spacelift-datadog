@@ -41,3 +41,18 @@ Common tags for all metrics are the following:
 - `space` (string): name of the Spacelift space the run belongs to;
 - `stack` (string): name of the Spacelift stack the run belongs to;
 - `worker_pool` (string): name of the Spacelift worker pool the run was executed on - for the public worker pool this value is always `public`;
+
+## Release
+
+You need to bump the version in `.spacelift/config.yml` file. 
+```yaml
+module_version: 0.2.3
+```
+
+Then, the module will be published in `spacelift.io/spacelift-io/datadog/spacelift`.
+
+You need to create the new tag to bump the version on the Terraform registry side.
+```
+git tag -a -m 'Description...' v0.2.3
+git push --tag
+```
