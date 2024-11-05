@@ -87,7 +87,7 @@ policies(extra_tags) = [metric |
 			"value": 1,
 		}],
 		"tags": array.concat(tags(extra_tags), receipt_tags),
-		"unit": "policy",
+		"unit": "item",
 	}
 ]
 
@@ -110,7 +110,7 @@ state_timings(extra_tags) = [metric |
 			"value": state_timing.duration,
 		}],
 		"tags": array.concat(tags(extra_tags), [sprintf("state:%s", [lower(state_timing.state)])]),
-		"unit": "nanoseconds",
+		"unit": "nanosecond",
 	}
 ] 
 
