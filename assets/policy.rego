@@ -22,7 +22,7 @@ webhook[{"endpoint_id": endpoint_id, "payload": payload}] {
 	# Only send the webhook if the run reached a terminal state.
 	run_state == terminal[_]
 
-	payload := {"series": array.concat(
+	series_data := array.concat(
 		[
 			run_count(endpoint.labels),
 			resources("added", endpoint.labels),
@@ -34,7 +34,11 @@ webhook[{"endpoint_id": endpoint_id, "payload": payload}] {
 			policies(endpoint.labels),
 			state_timings(endpoint.labels),
 		),
-	)}
+	)
+
+    # Only send the webhook if the the payload is non-empty
+    count(series_data) > 0
+    payload := {"series": series_data}
 }
 
 # Metric definition for spacelift.integration.run.count.
@@ -95,7 +99,7 @@ policies(extra_tags) = [metric |
 #
 # It is the duration of each phase of the run, broken down by the standard tags
 # and the phase name.
-# 
+#
 # State timings reported by this webhook will be assigned to the time when the
 # run is last updated (i.e. when it reaches the terminal state), not when each
 # of the respective phases actually took place. In most cases this should be
@@ -112,7 +116,7 @@ state_timings(extra_tags) = [metric |
 		"tags": array.concat(tags(extra_tags), [sprintf("state:%s", [lower(state_timing.state)])]),
 		"unit": "nanosecond",
 	}
-] 
+]
 
 tags(extra_tags) = array.concat([tag | tag := extra_tags[_]; contains(tag, ":")], [
 	sprintf("account:%s", [input.account.name]),
@@ -125,7 +129,7 @@ tags(extra_tags) = array.concat([tag | tag := extra_tags[_]; contains(tag, ":")]
 	sprintf("space:%s", [lower(input.run_updated.stack.space.id)]),
 	sprintf("stack:%s", [lower(input.run_updated.stack.id)]),
 	sprintf("triggered_by:%s", [input.run_updated.run.triggered_by]),
-    sprintf("worker_pool:%s", [worker_pool]),
+	sprintf("worker_pool:%s", [worker_pool]),
 ])
 
 default worker_pool = "public"
@@ -137,3 +141,4 @@ worker_pool = name {
 # Only sample the webhook if the run reached a terminal state, and some metrics
 # have been collected.
 sample { run_state == terminal[_] }
+
