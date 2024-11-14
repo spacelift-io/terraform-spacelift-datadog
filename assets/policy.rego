@@ -36,9 +36,9 @@ webhook[{"endpoint_id": endpoint_id, "payload": payload}] {
 		),
 	)
 
-    # Only send the webhook if the the payload is non-empty
-    count(series_data) > 0
-    payload := {"series": series_data}
+	# Only send the webhook if the the payload is non-empty
+	count(series_data) > 0
+	payload := {"series": series_data}
 }
 
 # Metric definition for spacelift.integration.run.count.
@@ -65,9 +65,9 @@ resources(type, extra_tags) = {
 	"points": [{
 		"timestamp": timestamp,
 		"value": count([change |
-    		change := input.run_updated.run.changes[_]
-    		change.phase == "plan"
-    		contains(change.action, type)
+			change := input.run_updated.run.changes[_]
+			change.phase == "plan"
+			contains(change.action, type)
 		]),
 	}],
 	"tags": array.concat(tags(extra_tags), [sprintf("change_type:%s", [type])]),
@@ -140,5 +140,6 @@ worker_pool = name {
 
 # Only sample the webhook if the run reached a terminal state, and some metrics
 # have been collected.
-sample { run_state == terminal[_] }
-
+sample {
+	run_state == terminal[_]
+}
