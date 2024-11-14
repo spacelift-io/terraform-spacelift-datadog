@@ -1,5 +1,5 @@
 version: 1
-module_version: 0.2.4
+module_version: 0.2.5
 
 tests:
   - name: Default test
