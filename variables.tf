@@ -43,7 +43,7 @@ variable "extra_tags" {
 }
 
 variable "exclude_tags" {
-  type = list(string)
+  type = set(string)
   description = "Tags to exclude from the common tags"
   default = []
 }
