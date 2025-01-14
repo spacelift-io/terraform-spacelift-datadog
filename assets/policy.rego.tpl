@@ -114,7 +114,7 @@ state_timings(extra_tags) = [metric |
 	}
 ] 
 
-tags(extra_tags) = array.concat([tag | tag := extra_tags[_]; contains(tag, ":")], ${basic_tags})
+tags(extra_tags) = array.concat([tag | tag := extra_tags[_]; contains(tag, ":")], ${common_tags})
 
 default worker_pool = "public"
 
