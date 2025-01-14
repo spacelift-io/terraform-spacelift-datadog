@@ -20,7 +20,7 @@ resource "spacelift_policy" "datadog-metrics" {
   space_id = var.space_id
 
   body = templatefile("${path.module}/assets/policy.rego.tpl", {
-    common_tags = jsonencode([for k, v in local.common_tags : "${k}:${v}" if !contains(var.exclude_tags, k) ]),
+    common_tags = {for k, v in local.common_tags : k => v if !contains(var.exclude_tags, k)},
   })
   labels = ["ddmetrics"]
 }

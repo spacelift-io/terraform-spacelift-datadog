@@ -114,7 +114,11 @@ state_timings(extra_tags) = [metric |
 	}
 ] 
 
-tags(extra_tags) = array.concat([tag | tag := extra_tags[_]; contains(tag, ":")], ${common_tags})
+tags(extra_tags) = array.concat([tag | tag := extra_tags[_]; contains(tag, ":")], 
+	[%{ for key, value in common_tags }
+		sprintf("${key}:%s", ${value}),%{~ endfor }
+	],
+)
 
 default worker_pool = "public"
 
