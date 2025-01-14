@@ -19,7 +19,6 @@ resource "spacelift_policy" "datadog-metrics" {
   type     = "NOTIFICATION"
   space_id = var.space_id
 
-  #body   = file("${path.module}/assets/policy.rego")
   body = templatefile("${path.module}/assets/policy.rego.tpl", {
     common_tags = jsonencode([for k, v in local.common_tags : "${k}:${v}" if !contains(var.exclude_tags, k) ]),
   })
