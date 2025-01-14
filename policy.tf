@@ -1,15 +1,15 @@
 locals {
   common_tags = {
     "account":         "[input.account.name]",
-	  "branch":          "[input.run_updated.run.commit.branch]",
-	  "drift_detection": "[input.run_updated.run.drift_detection]",
-	  "run_note":        "[input.run_updated.note]",
-	  "run_type":        "[lower(input.run_updated.run.type)]",
-	  "run_url":         "[input.run_updated.urls.run]",
-	  "final_state":     "[lower(run_state)]",
-	  "space":           "[lower(input.run_updated.stack.space.id)]",
-	  "stack":           "[lower(input.run_updated.stack.id)]",
-	  "triggered_by":    "[input.run_updated.run.triggered_by]",
+    "branch":          "[input.run_updated.run.commit.branch]",
+    "drift_detection": "[input.run_updated.run.drift_detection]",
+    "run_note":        "[input.run_updated.note]",
+    "run_type":        "[lower(input.run_updated.run.type)]",
+    "run_url":         "[input.run_updated.urls.run]",
+    "final_state":     "[lower(run_state)]",
+    "space":           "[lower(input.run_updated.stack.space.id)]",
+    "stack":           "[lower(input.run_updated.stack.id)]",
+    "triggered_by":    "[input.run_updated.run.triggered_by]",
     "worker_pool":     "[worker_pool]",
   }
 }
