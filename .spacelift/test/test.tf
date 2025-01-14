@@ -18,5 +18,5 @@ module "datadog-metrics" {
   integration_name = "Datadog metrics, run ${var.spacelift_run_id}"
   space_id         = "public-modules-01GVNH2CJKSKHRSMDPBMQ3WZT9"
   extra_tags       = { "env" : "test" }
-  excluded_tags = [ "run_note", "run_url" ]
+  exclude_tags = [ "run_note", "run_url" ]
 }
