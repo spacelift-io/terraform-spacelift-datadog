@@ -41,3 +41,9 @@ variable "extra_tags" {
   description = "Extra tags to add to the Datadog metrics, must be in key:value format"
   default = {}
 }
+
+variable "exclude_tags" {
+  type = set(string)
+  description = "Tags to exclude from the common tags"
+  default = []
+}

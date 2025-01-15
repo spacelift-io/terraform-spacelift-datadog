@@ -12,6 +12,7 @@ module "spacelift_datadog" {
   dd_site = "datadoghq.com"
   space_id = "root"
   extra_tags = {"env":"prod"}
+  exclude_tags = ["run_note", "run_url"]
 }
 ```
 
@@ -41,6 +42,8 @@ Common tags for all metrics are the following:
 - `space` (string): name of the Spacelift space the run belongs to;
 - `stack` (string): name of the Spacelift stack the run belongs to;
 - `worker_pool` (string): name of the Spacelift worker pool the run was executed on - for the public worker pool this value is always `public`;
+
+You can exclude tags using the `exclude_tags` variable, which allows a user to reduce the number of tags added to the metrics.
 
 ## Release
 

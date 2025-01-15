@@ -114,19 +114,11 @@ state_timings(extra_tags) = [metric |
 	}
 ] 
 
-tags(extra_tags) = array.concat([tag | tag := extra_tags[_]; contains(tag, ":")], [
-	sprintf("account:%s", [input.account.name]),
-	sprintf("branch:%s", [input.run_updated.run.commit.branch]),
-	sprintf("drift_detection:%s", [input.run_updated.run.drift_detection]),
-	sprintf("run_note:%s", [input.run_updated.note]),
-	sprintf("run_type:%s", [lower(input.run_updated.run.type)]),
-	sprintf("run_url:%s", [input.run_updated.urls.run]),
-	sprintf("final_state:%s", [lower(run_state)]),
-	sprintf("space:%s", [lower(input.run_updated.stack.space.id)]),
-	sprintf("stack:%s", [lower(input.run_updated.stack.id)]),
-	sprintf("triggered_by:%s", [input.run_updated.run.triggered_by]),
-    sprintf("worker_pool:%s", [worker_pool]),
-])
+tags(extra_tags) = array.concat([tag | tag := extra_tags[_]; contains(tag, ":")], 
+	[%{ for key, value in common_tags }
+		sprintf("${key}:%s", ${value}),%{~ endfor }
+	],
+)
 
 default worker_pool = "public"
 
