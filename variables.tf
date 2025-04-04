@@ -1,7 +1,7 @@
 variable "dd_api_key" {
-    type        = string
-    description = "Datadog API key to use for sending metrics."
-    sensitive   = true
+  type        = string
+  description = "Datadog API key to use for sending metrics."
+  sensitive   = true
 }
 
 variable "dd_site" {
@@ -25,9 +25,21 @@ variable "dd_site" {
 }
 
 variable "integration_name" {
-  type = string
+  type        = string
   description = "Name of the integration to create."
-  default = "Datadog metrics"
+  default     = "Datadog"
+}
+
+variable "send_logs" {
+  type        = bool
+  description = "Whether to send logs to Datadog."
+  default     = true
+}
+
+variable "send_metrics" {
+  type        = bool
+  description = "Whether to send metrics to Datadog."
+  default     = true
 }
 
 variable "space_id" {
@@ -37,13 +49,13 @@ variable "space_id" {
 }
 
 variable "extra_tags" {
-  type = map(string)
+  type        = map(string)
   description = "Extra tags to add to the Datadog metrics, must be in key:value format"
-  default = {}
+  default     = {}
 }
 
 variable "exclude_tags" {
-  type = set(string)
+  type        = set(string)
   description = "Tags to exclude from the common tags"
-  default = []
+  default     = []
 }

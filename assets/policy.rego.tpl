@@ -12,6 +12,7 @@ run_state := input.run_updated.run.state
 # We need this because the Go JSON parser can't do a round trip with an int64.
 timestamp := json.unmarshal(sprintf("%.0f", [input.run_updated.run.updated_at / 1e9]))
 
+%{ if send_metrics ~}
 # https://docs.datadoghq.com/api/latest/metrics/#submit-metrics
 webhook[{"endpoint_id": endpoint_id, "payload": payload}] {
 	# Send the webhook to any endpoint labeled as "ddmetrics".
@@ -36,6 +37,92 @@ webhook[{"endpoint_id": endpoint_id, "payload": payload}] {
 		),
 	)}
 }
+%{ endif ~}
+
+# Send logs to Datadog
+# https://docs.datadoghq.com/api/latest/logs/#send-logs
+# We do this in multiple webhook calls because DD will truncate the payload if its more than 1MB
+# This way, we can send the logs for all phases and it will only cut off very long logs.
+
+hostname := sprintf("spacelift-%s", [input.run_updated.stack.id])
+
+%{ if send_logs ~}
+# "Preparing" logs to datadog
+webhook[{"endpoint_id": endpoint_id, "payload": payload}] {
+	# Send the webhook to any endpoint labeled as "ddlogs".
+	endpoint := input.webhook_endpoints[_]
+	endpoint.labels[_] == "ddlogs"
+	endpoint_id := endpoint.id
+
+    # Only send terminal tracked runs
+	input.run_updated.run.type == "TRACKED"
+	run_state == terminal[_]
+
+	payload := {
+	  "ddtags": sprintf("spacelift.stage:preparing,spacelift.run_id:%s,spacelift.%s", [input.run_updated.run.id, concat(",spacelift.", tags(endpoint.labels))]),
+	  "hostname": hostname,
+	  "service": "spacelift",
+      "message": "spacelift::logs::preparing"
+	}
+}
+
+# "Initializing" logs to datadog
+webhook[{"endpoint_id": endpoint_id, "payload": payload}] {
+	# Send the webhook to any endpoint labeled as "ddlogs".
+	endpoint := input.webhook_endpoints[_]
+	endpoint.labels[_] == "ddlogs"
+	endpoint_id := endpoint.id
+
+    # Only send terminal tracked runs
+	input.run_updated.run.type == "TRACKED"
+	run_state == terminal[_]
+
+	payload := {
+	  "ddtags": sprintf("spacelift.stage:initializing,spacelift.run_id:%s,spacelift.%s", [input.run_updated.run.id, concat(",spacelift.", tags(endpoint.labels))]),
+	  "hostname": hostname,
+	  "service": "spacelift",
+      "message": "spacelift::logs::initializing"
+	}
+}
+
+# "Planning" logs to datadog
+webhook[{"endpoint_id": endpoint_id, "payload": payload}] {
+	# Send the webhook to any endpoint labeled as "ddlogs".
+	endpoint := input.webhook_endpoints[_]
+	endpoint.labels[_] == "ddlogs"
+	endpoint_id := endpoint.id
+
+    # Only send terminal tracked runs
+	input.run_updated.run.type == "TRACKED"
+	run_state == terminal[_]
+
+	payload := {
+	  "ddtags": sprintf("spacelift.stage:planning,spacelift.run_id:%s,spacelift.%s", [input.run_updated.run.id, concat(",spacelift.", tags(endpoint.labels))]),
+	  "hostname": hostname,
+	  "service": "spacelift",
+      "message": "spacelift::logs::planning"
+	}
+}
+
+# "Applying" logs to datadog
+webhook[{"endpoint_id": endpoint_id, "payload": payload}] {
+	# Send the webhook to any endpoint labeled as "ddlogs".
+	endpoint := input.webhook_endpoints[_]
+	endpoint.labels[_] == "ddlogs"
+	endpoint_id := endpoint.id
+
+    # Only send terminal tracked runs
+	input.run_updated.run.type == "TRACKED"
+	run_state == terminal[_]
+
+	payload := {
+	  "ddtags": sprintf("spacelift.stage:applying,spacelift.run_id:%s,spacelift.%s", [input.run_updated.run.id, concat(",spacelift.", tags(endpoint.labels))]),
+	  "hostname": hostname,
+	  "service": "spacelift",
+      "message": "spacelift::logs::applying"
+	}
+}
+%{ endif ~}
 
 # Metric definition for spacelift.integration.run.count.
 #
