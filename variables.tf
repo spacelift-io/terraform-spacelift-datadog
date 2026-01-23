@@ -37,9 +37,15 @@ variable "space_id" {
 }
 
 variable "extra_tags" {
-  type = map(string)
-  description = "Extra tags to add to the Datadog metrics, must be in key:value format"
-  default = {}
+  type        = map(string)
+  description = "Static tags to add to all metrics (e.g., {\"env\" = \"prod\"}). Added via webhook labels."
+  default     = {}
+}
+
+variable "extra_dynamic_tags" {
+  type        = map(string)
+  description = "Dynamic tags using Rego expressions (e.g., {\"environment\" = \"[input.run_updated.stack.labels[\\\"env\\\"]]\"}). Values must be Rego array expressions."
+  default     = {}
 }
 
 variable "exclude_tags" {

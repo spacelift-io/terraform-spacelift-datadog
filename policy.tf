@@ -13,6 +13,8 @@ locals {
     "triggered_by":      "[input.run_updated.run.triggered_by]",
     "worker_pool":       "[worker_pool]",
   }
+
+  all_tags = merge(local.common_tags, var.extra_dynamic_tags)
 }
 
 resource "spacelift_policy" "datadog-metrics" {
