@@ -13,6 +13,8 @@ locals {
     "triggered_by":      "[input.run_updated.run.triggered_by]",
     "worker_pool":       "[worker_pool]",
   }
+
+  all_tags = merge(local.common_tags, var.extra_tags)
 }
 
 resource "spacelift_policy" "datadog-metrics" {
@@ -21,7 +23,7 @@ resource "spacelift_policy" "datadog-metrics" {
   space_id = var.space_id
 
   body = templatefile("${path.module}/assets/policy.rego.tpl", {
-    common_tags = {for k, v in local.common_tags : k => v if !contains(var.exclude_tags, k)},
+    common_tags = {for k, v in local.all_tags : k => v if !contains(var.exclude_tags, k)},
   })
   labels = ["ddmetrics"]
 }
